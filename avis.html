@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votre avis — Napoli Pizza</title>
+<meta name="description" content="Donnez votre avis sur votre expérience chez Napoli Pizza.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #D4380D;
+  --color-secondary: #1A1A2E;
+  --color-accent: #F5A623;
+  --color-bg: #FAFAF8;
+  --color-text: #2D2D2D;
+  --color-text-light: #6B7280;
+  --color-white: #FFFFFF;
+  --color-star: #FBBF24;
+  --color-star-empty: #E5E7EB;
+  --color-success: #10B981;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --radius: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { height: 100%; }
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px 32px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  animation: fadeUp 0.5s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.logo-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 auto 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+.restaurant-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  border: 3px solid var(--color-bg);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+.restaurant-name {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin-bottom: 8px;
+}
+.review-prompt {
+  color: var(--color-text-light);
+  font-size: 1rem;
+  margin-bottom: 32px;
+}
+.stars-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.star {
+  font-size: 2.8rem;
+  cursor: pointer;
+  color: var(--color-star-empty);
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.star:hover, .star.hovered { color: var(--color-star); transform: scale(1.15); }
+.star.selected { color: var(--color-star); animation: popStar 0.3s ease; }
+@keyframes popStar {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.star-label {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  min-height: 24px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.screen { display: none; }
+.screen.active { display: block; animation: fadeUp 0.4s ease; }
+.positive-icon, .negative-icon, .thankyou-icon { font-size: 3.5rem; margin-bottom: 16px; }
+.positive-title, .negative-title, .thankyou-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.positive-title { color: var(--color-secondary); }
+.negative-title { color: var(--color-secondary); }
+.thankyou-title { color: var(--color-success); }
+.positive-text, .negative-text, .thankyou-text {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+.btn-google {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-google:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,56,13,0.4); }
+.btn-google svg { width: 20px; height: 20px; }
+.feedback-form { display: flex; flex-direction: column; gap: 14px; text-align: left; }
+.feedback-form label { font-size: 0.85rem; font-weight: 500; color: var(--color-text); }
+.feedback-form textarea {
+  width: 100%; min-height: 100px; padding: 14px;
+  border: 2px solid var(--color-star-empty); border-radius: 12px;
+  font-size: 0.95rem; font-family: var(--font-body); resize: vertical;
+  transition: border-color 0.3s ease; color: var(--color-text);
+}
+.feedback-form textarea:focus { outline: none; border-color: var(--color-primary); }
+.feedback-form textarea::placeholder { color: #B0B0B0; }
+.feedback-form input[type="tel"] {
+  width: 100%; padding: 12px 14px;
+  border: 2px solid var(--color-star-empty); border-radius: 12px;
+  font-size: 0.95rem; font-family: var(--font-body);
+  transition: border-color 0.3s ease; color: var(--color-text);
+}
+.feedback-form input[type="tel"]:focus { outline: none; border-color: var(--color-primary); }
+.feedback-form input[type="tel"]::placeholder { color: #B0B0B0; }
+.optional-tag { font-weight: 400; color: var(--color-text-light); font-size: 0.8rem; }
+.btn-send {
+  width: 100%; padding: 14px;
+  background: var(--color-secondary); color: var(--color-white);
+  border: none; border-radius: 50px;
+  font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: all 0.3s ease; font-family: var(--font-body);
+}
+.btn-send:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(26,26,46,0.3); }
+.powered-by {
+  text-align: center; margin-top: 24px;
+  font-size: 0.75rem; color: var(--color-text-light);
+}
+.powered-by a { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+@media (max-width: 480px) {
+  body { padding: 16px; }
+  .card { padding: 32px 24px; }
+  .star { font-size: 2.4rem; }
+  .stars-container { gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- SCREEN 1: RATING -->
+  <div class="screen active" id="screen-rating">
+    <div class="logo-placeholder" id="logo-area"></div>
+    <h1 class="restaurant-name" id="restaurant-name"></h1>
+    <p class="review-prompt">Comment était votre expérience ?</p>
+    <p class="star-label" id="star-label">&nbsp;</p>
+    <div class="stars-container" id="stars-container">
+      <span class="star" data-value="1">★</span>
+      <span class="star" data-value="2">★</span>
+      <span class="star" data-value="3">★</span>
+      <span class="star" data-value="4">★</span>
+      <span class="star" data-value="5">★</span>
+    </div>
+  </div>
+
+  <!-- SCREEN 2A: POSITIVE (4-5 stars) → Google -->
+  <div class="screen" id="screen-positive">
+    <div class="positive-icon">🎉</div>
+    <h2 class="positive-title">Merci beaucoup !</h2>
+    <p class="positive-text">Votre avis nous fait chaud au cœur ! Partagez votre expérience sur Google pour aider d'autres clients à nous découvrir.</p>
+    <a href="#" class="btn-google" id="google-review-link" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Laisser un avis Google
+    </a>
+  </div>
+
+  <!-- SCREEN 2B: NEGATIVE (1-3 stars) → Feedback privé -->
+  <div class="screen" id="screen-negative">
+    <div class="negative-icon">😔</div>
+    <h2 class="negative-title">Nous sommes désolés</h2>
+    <p class="negative-text">Votre expérience n'a pas été à la hauteur. Aidez-nous à nous améliorer.</p>
+    <form class="feedback-form" id="feedback-form">
+      <div>
+        <label for="feedback-text">Que pouvons-nous améliorer ?</label>
+        <textarea id="feedback-text" placeholder="Décrivez votre expérience..." required></textarea>
+      </div>
+      <div>
+        <label for="feedback-phone">Votre WhatsApp <span class="optional-tag">(optionnel)</span></label>
+        <input type="tel" id="feedback-phone" placeholder="+212 6XX XXX XXX">
+      </div>
+      <button type="submit" class="btn-send">Envoyer mon avis</button>
+    </form>
+  </div>
+
+  <!-- SCREEN 3: THANK YOU -->
+  <div class="screen" id="screen-thankyou">
+    <div class="thankyou-icon">💚</div>
+    <h2 class="thankyou-title">Merci pour votre retour !</h2>
+    <p class="thankyou-text">Votre avis a bien été transmis au gérant. Nous ferons tout pour améliorer votre prochaine expérience.</p>
+  </div>
+</div>
+
+<div class="powered-by">Propulsé par <a href="#" id="agency-link"></a></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   CONFIGURATION — MODIFIER POUR CHAQUE CLIENT
+   ═══════════════════════════════════════════════ */
+const config = {
+  restaurant: {
+    name: "Napoli Pizza",
+    initials: "NP",
+    logoUrl: "",
+    googleReviewUrl: "https://search.google.com/local/writereview?placeid=PLACE_ID_ICI",
+  },
+  feedback: {
+    googleSheetWebhookUrl: "https://script.google.com/macros/s/VOTRE_SCRIPT_ID/exec",
+    ownerWhatsapp: "212522123456",
+  },
+  branding: {
+    agencyName: "RestoDigital",
+    agencyUrl: "https://restodigital.ma",
+  },
+  colors: {
+    primary: "#D4380D",
+    secondary: "#1A1A2E",
+  },
+};
+
+/* ═══════ APPLY CONFIG ═══════ */
+(function init() {
+  document.documentElement.style.setProperty('--color-primary', config.colors.primary);
+  document.documentElement.style.setProperty('--color-secondary', config.colors.secondary);
+  document.getElementById('restaurant-name').textContent = config.restaurant.name;
+  const logoArea = document.getElementById('logo-area');
+  if (config.restaurant.logoUrl) {
+    logoArea.outerHTML = '<img class="restaurant-logo" src="' + config.restaurant.logoUrl + '" alt="' + config.restaurant.name + '">';
+  } else {
+    logoArea.textContent = config.restaurant.initials;
+  }
+  document.getElementById('google-review-link').href = config.restaurant.googleReviewUrl;
+  const agencyLink = document.getElementById('agency-link');
+  agencyLink.href = config.branding.agencyUrl;
+  agencyLink.textContent = config.branding.agencyName;
+  document.title = 'Votre avis — ' + config.restaurant.name;
+})();
+
+/* ═══════ STAR RATING ═══════ */
+(function setupStars() {
+  const stars = document.querySelectorAll('.star');
+  const label = document.getElementById('star-label');
+  let selectedRating = 0;
+  const labels = { 1:"Très décevant 😞", 2:"Décevant 😕", 3:"Correct 😐", 4:"Très bien 😊", 5:"Excellent ! 🤩" };
+
+  stars.forEach(star => {
+    star.addEventListener('mouseenter', () => {
+      const val = parseInt(star.dataset.value);
+      stars.forEach(s => s.classList.toggle('hovered', parseInt(s.dataset.value) <= val));
+      label.textContent = labels[val];
+    });
+    star.addEventListener('mouseleave', () => {
+      stars.forEach(s => s.classList.remove('hovered'));
+      label.textContent = selectedRating ? labels[selectedRating] : '\u00A0';
+    });
+    star.addEventListener('click', () => {
+      selectedRating = parseInt(star.dataset.value);
+      stars.forEach(s => s.classList.toggle('selected', parseInt(s.dataset.value) <= selectedRating));
+      label.textContent = labels[selectedRating];
+      setTimeout(() => {
+        document.getElementById('screen-rating').classList.remove('active');
+        if (selectedRating >= 4) {
+          document.getElementById('screen-positive').classList.add('active');
+        } else {
+          document.getElementById('screen-negative').classList.add('active');
+        }
+      }, 600);
+    });
+    star.addEventListener('touchstart', (e) => { e.preventDefault(); star.click(); });
+  });
+})();
+
+/* ═══════ FEEDBACK FORM ═══════ */
+(function setupFeedback() {
+  document.getElementById('feedback-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = {
+      restaurant: config.restaurant.name,
+      rating: document.querySelectorAll('.star.selected').length,
+      feedback: document.getElementById('feedback-text').value,
+      phone: document.getElementById('feedback-phone').value || "Non fourni",
+      timestamp: new Date().toISOString(),
+      type: "negative_feedback",
+    };
+    try {
+      if (config.feedback.googleSheetWebhookUrl && !config.feedback.googleSheetWebhookUrl.includes('VOTRE_SCRIPT_ID')) {
+        await fetch(config.feedback.googleSheetWebhookUrl, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+      }
+    } catch (err) { console.log('Webhook error:', err); }
+    if (config.feedback.ownerWhatsapp) {
+      const waMsg = encodeURIComponent(
+        '⚠️ Feedback négatif — ' + config.restaurant.name + '\n\n' +
+        'Note : ' + data.rating + '/5\n' +
+        'Commentaire : ' + data.feedback + '\n' +
+        'Contact : ' + data.phone + '\n' +
+        'Date : ' + new Date().toLocaleString('fr-FR')
+      );
+      try { window.open('https://wa.me/' + config.feedback.ownerWhatsapp + '?text=' + waMsg, '_blank'); } catch(err) {}
+    }
+    document.getElementById('screen-negative').classList.remove('active');
+    document.getElementById('screen-thankyou').classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>
